@@ -2254,7 +2254,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 #project-dialog:not([data-project="pickon"]){width:min(1440px,calc(100vw - 32px))!important;height:min(960px,calc(100dvh - 32px));max-height:none!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;overflow:hidden!important;box-shadow:none!important;color:#edfaff}
 #project-dialog:not([data-project="pickon"])::backdrop{background:transparent!important;backdrop-filter:none!important}
 #project-dialog:not([data-project="pickon"])>#pickon-live-glass{display:block!important;position:absolute;inset:26px;border-radius:46px;overflow:hidden;z-index:0;pointer-events:none;background:#082c4175;box-shadow:0 10px 26px #001c3220,inset 0 1px 1px #d5f2f132,inset -1px -1px 1px #c1e5ea20}
-#works-glass-scroll{position:absolute;inset:26px;z-index:1;overflow:auto;border-radius:46px;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#a8ccd677 transparent;color:#edfaff;background:#082c4138}
+#works-glass-scroll{position:absolute;inset:26px;z-index:1;overflow:auto;border-radius:46px;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#a8ccd677 transparent;color:#edfaff;background:#082c416b}
 #project-dialog[data-project="pickon"]>#works-glass-scroll{display:none!important}
 #works-glass-scroll>.dialog-head{position:sticky;top:0;z-index:10;background:#0b3448b8!important;backdrop-filter:blur(14px);border-color:#d3eef426!important;color:#edfaff!important;padding:30px 52px}
 #works-glass-scroll>.dialog-head h2{font-size:20px}
@@ -2276,27 +2276,31 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 #works-glass-content-scroll>.dialog-content{display:none!important}
 @media(max-width:600px){#works-glass-scroll>.dialog-head{height:80px}#works-glass-content-scroll{inset:80px 10px 18px 0}}
 </style><style id="works-edge-light-style">@property --works-rim-angle{syntax:"<angle>";inherits:false;initial-value:320deg}
-#project-dialog[data-project]>#works-edge-reflection{display:block!important;position:absolute;inset:26px;border-radius:46px;z-index:4;pointer-events:none;border:1.5px solid transparent;background:conic-gradient(from var(--works-rim-angle),transparent 0deg,transparent 315deg,rgba(255,255,255,0) 322deg,rgba(255,255,255,.75) 338deg,#fff 350deg,rgba(255,255,255,0) 360deg) border-box;mask:linear-gradient(#fff 0 0) padding-box,linear-gradient(#fff 0 0);mask-composite:exclude;opacity:0}
+#project-dialog[open][data-project]>#works-edge-reflection#works-edge-reflection{display:block!important;position:absolute;inset:26px;border-radius:46px;z-index:100!important;pointer-events:none;border:2px solid transparent;background:conic-gradient(from var(--works-rim-angle),transparent 0deg,transparent 315deg,rgba(255,255,255,0) 322deg,rgba(255,255,255,.75) 338deg,#fff 350deg,rgba(255,255,255,0) 360deg) border-box;mask:linear-gradient(#fff 0 0) padding-box,linear-gradient(#fff 0 0);mask-composite:exclude;opacity:0}
 #project-dialog[open][data-project]>#works-edge-reflection{animation:works-reflection-glide 11s linear infinite}
 @keyframes works-reflection-glide{
 0%{--works-rim-angle:320deg;opacity:0}
 3%{--works-rim-angle:322deg;opacity:0}
-8%{--works-rim-angle:337deg;opacity:.9}
+8%{--works-rim-angle:337deg;opacity:1}
 18%{--works-rim-angle:378deg;opacity:0}
 29%{--works-rim-angle:378deg;opacity:0}
 29.1%{--works-rim-angle:92deg;opacity:0}
-34%{--works-rim-angle:102deg;opacity:.8}
+34%{--works-rim-angle:102deg;opacity:.95}
 43%{--works-rim-angle:131deg;opacity:0}
 61%{--works-rim-angle:131deg;opacity:0}
 61.1%{--works-rim-angle:245deg;opacity:0}
-67%{--works-rim-angle:235deg;opacity:.85}
+67%{--works-rim-angle:235deg;opacity:1}
 80%{--works-rim-angle:205deg;opacity:0}
 99.9%{--works-rim-angle:205deg;opacity:0}
 100%{--works-rim-angle:320deg;opacity:0}
 }
 @media(max-width:600px){#project-dialog[data-project]>#works-edge-reflection{inset:10px;border-radius:36px}}
 @media(prefers-reduced-motion:reduce){#project-dialog[open][data-project]>#works-edge-reflection{animation:none;opacity:0}}
-</style><script id="works-edge-light">(()=>{function init(){const d=document.getElementById('project-dialog');if(!d||document.getElementById('works-edge-reflection'))return;const edge=document.createElement('div');edge.id='works-edge-reflection';edge.setAttribute('aria-hidden','true');d.append(edge);function sync(){edge.style.animationPlayState=document.hidden?'paused':'running'}document.addEventListener('visibilitychange',sync);sync()}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init()})();</script><style id="opening-original-fallback">#opening.opening-use-original-logo #wordmark{opacity:1!important}#opening.opening-use-original-logo #titleArea{pointer-events:auto!important}#opening.opening-use-original-logo #portfolio-opening-flow{display:none!important}</style></head>
+</style><script id="works-edge-light">(()=>{function init(){const d=document.getElementById('project-dialog');if(!d||document.getElementById('works-edge-reflection'))return;const edge=document.createElement('div');edge.id='works-edge-reflection';edge.setAttribute('aria-hidden','true');d.append(edge);function sync(){edge.style.animationPlayState=document.hidden?'paused':'running'}document.addEventListener('visibilitychange',sync);sync()}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init()})();</script><style id="opening-original-fallback">#opening.opening-use-original-logo #wordmark{opacity:1!important}#opening.opening-use-original-logo #titleArea{pointer-events:auto!important}#opening.opening-use-original-logo #portfolio-opening-flow{display:none!important}</style><style id="final-readability-pass">
+html body #about #about-title,html body #about #about-title .name-letter{color:#205b68!important}
+html body #about .about-role{color:#174754!important}
+</style>
+</head>
 
 <body class="opening-active opening-booting">
 <div id="opening-boot-poster" aria-hidden="true"><svg viewBox="0 0 1000 528" preserveAspectRatio="none"><defs><linearGradient id="boot-horizon-beam"><stop stop-color="#87dbe5" stop-opacity="0"/><stop offset=".28" stop-color="#8cdee7" stop-opacity=".25"/><stop offset=".5" stop-color="#e2ffff" stop-opacity=".8"/><stop offset=".72" stop-color="#8cdee7" stop-opacity=".25"/><stop offset="1" stop-color="#87dbe5" stop-opacity="0"/></linearGradient></defs><path d="M0 277.2H1000" fill="none" stroke="url(#boot-horizon-beam)" stroke-width="1.1"/></svg></div>
@@ -2834,7 +2838,7 @@ const image=new Image();image.onload=()=>{gl.activeTexture(gl.TEXTURE0);gl.bindT
 #fluidity-glass-work,#fluidity-glass-work .ocean-stage{background:transparent!important}
 #fluidity-glass-work .glass-bevel{display:none}
 #fluidity-glass-work .glass-window{box-shadow:none}
-#fluidity-glass-work .glass-window::before{background:#082c4138}
+#fluidity-glass-work .glass-window::before{background:#082c416b}
 &lt;/style&gt;&lt;script&gt;document.querySelector(&#x27;.dialog-heading button&#x27;).onclick=function(){parent.postMessage({fluidityPickonClose:true},&#x27;*&#x27;)};document.querySelector(&#x27;.footer a&#x27;).onclick=function(e){e.preventDefault();parent.postMessage({fluidityPickonClose:true},&#x27;*&#x27;)};&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
 
 </dialog>
