@@ -2979,22 +2979,29 @@ reduceMotion.addEventListener('change',()=>{
     return motion.enabled&&!reduceMotion.matches;
   }
 
+  function detailContent(){
+    return $(dialog.dataset.project==='pickon'?'pickon-glass-frame':'works-glass-scroll');
+  }
+
   function fadeInDetail(){
     if(!detailMotionEnabled())return;
-    entrance=dialog.animate([{opacity:0},{opacity:1}],{
+    const content=detailContent();
+    if(!content)return;
+    entrance=content.animate([{opacity:0},{opacity:1}],{
       duration:240,easing:'ease-out'
     });
   }
 
   dialog.close=function(returnValue){
     if(!dialog.open||closing)return;
-    if(!detailMotionEnabled()){
+    const content=detailContent();
+    if(!detailMotionEnabled()||!content){
       closeNative(returnValue);
       return;
     }
-    const {opacity}=getComputedStyle(dialog);
+    const {opacity}=getComputedStyle(content);
     entrance?.cancel();
-    closing=dialog.animate([{opacity},{opacity:0}],{
+    closing=content.animate([{opacity},{opacity:0}],{
       duration:250,easing:'ease-in-out',fill:'forwards'
     });
     closing.onfinish=()=>{
@@ -3316,7 +3323,7 @@ reduceMotion.addEventListener('change',()=>{
 const canvas=document.getElementById('ocean-canvas'),overlay=document.getElementById('opening'),image=new Image(),trigger=document.getElementById('titleArea'),label=document.getElementById('opening-enter'),skip=document.getElementById('opening-skip'),toggle=document.getElementById('opening-motion');
 const targets=[document.querySelector('main'),document.querySelector('.topbar'),document.getElementById('gauge')];
 let gl=null,finished=false,entering=false,ready=false,enabled=!reduceMotion.matches,raf=0,last=0,drawAt=-100,time=0,elapsed=0,p=0,width=1,height=1,bw=1,bh=1,rect=[0,0,1,1],mx=-10000,my=-10000,tx=-10000,ty=-10000,power=0,targetPower=0,currentDepth=0,targetDepth=0,mainEndDepth=.2;
-let backdrop,entryBackdrop,composite,buffer,fbo,entryFbo,backTexture,entryTexture,wordTexture,quality=.9,average=16,samples=0,pixelBudget=850000;
+let backdrop,entryBackdrop,composite,buffer,fbo,entryFbo,backTexture,entryTexture,quality=.9,average=16,samples=0,pixelBudget=850000;
 const uniformCache=new WeakMap(),attributeCache=new WeakMap();
 let surfaceHandoff=0,handoffStarted=-1;
 function updateSurfaceHandoff(now){
@@ -3375,13 +3382,28 @@ const entryOcean="precision highp float;\nuniform vec2 resolution;\nuniform vec2
 const display=`precision highp float;varying vec2 uv;uniform sampler2D oceanTexture;uniform sampler2D entryTexture;uniform float mainBlend;uniform float coastY;uniform float coastScale;uniform vec2 blurStep;uniform vec2 sampleScale;uniform vec2 sampleTexel;
 vec4 seaTap(sampler2D tex,vec2 q){return texture2D(tex,clamp(q*sampleScale,sampleTexel*.5,sampleScale-sampleTexel*.5));}
 vec4 waterSample(sampler2D tex,vec2 q){vec4 c=seaTap(tex,q);if(blurStep.x>0.){c*=.40;c+=seaTap(tex,q+vec2(blurStep.x,0.))*.15;c+=seaTap(tex,q-vec2(blurStep.x,0.))*.15;c+=seaTap(tex,q+vec2(0.,blurStep.y))*.15;c+=seaTap(tex,q-vec2(0.,blurStep.y))*.15;}return c;}
-void main(){vec2 mainUv=vec2((uv.x-.5)/coastScale+.5,1.-((1.-uv.y)-coastY)/coastScale);vec4 sea=waterSample(oceanTexture,clamp(mainUv,0.,1.));vec4 dive=waterSample(entryTexture,uv);gl_FragColor=mix(dive,sea,mainBlend);}`;
+void main(){
+ if(mainBlend<=0.){gl_FragColor=waterSample(entryTexture,uv);return;}
+ vec2 mainUv=vec2((uv.x-.5)/coastScale+.5,1.-((1.-uv.y)-coastY)/coastScale);
+ vec4 sea=waterSample(oceanTexture,clamp(mainUv,0.,1.));
+ if(mainBlend>=1.){gl_FragColor=sea;return;}
+ gl_FragColor=mix(waterSample(entryTexture,uv),sea,mainBlend);
+}`;
 function shader(type,source){const sh=gl.createShader(type);gl.shaderSource(sh,source);gl.compileShader(sh);if(!gl.getShaderParameter(sh,gl.COMPILE_STATUS))throw Error(gl.getShaderInfoLog(sh));return sh;}
 function program(fragment){const pr=gl.createProgram(),vs=shader(gl.VERTEX_SHADER,vertex),fs=shader(gl.FRAGMENT_SHADER,fragment);gl.attachShader(pr,vs);gl.attachShader(pr,fs);gl.linkProgram(pr);if(!gl.getProgramParameter(pr,gl.LINK_STATUS))throw Error(gl.getProgramInfoLog(pr));gl.deleteShader(vs);gl.deleteShader(fs);return pr;}
 function texture(unit){gl.activeTexture(gl.TEXTURE0+unit);const t=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,t);for(const [key,value] of [[gl.TEXTURE_MIN_FILTER,gl.LINEAR],[gl.TEXTURE_MAG_FILTER,gl.LINEAR],[gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE],[gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE]])gl.texParameteri(gl.TEXTURE_2D,key,value);return t;}
 function use(pr){gl.useProgram(pr);gl.bindBuffer(gl.ARRAY_BUFFER,buffer);let a=attributeCache.get(pr);if(a===undefined){a=gl.getAttribLocation(pr,'position');attributeCache.set(pr,a);}gl.enableVertexAttribArray(a);gl.vertexAttribPointer(a,2,gl.FLOAT,false,0,0);}
 function loc(pr,name){let cache=uniformCache.get(pr);if(!cache){cache=new Map();uniformCache.set(pr,cache);}if(!cache.has(name))cache.set(name,gl.getUniformLocation(pr,name));return cache.get(name);}
-function resize(){width=innerWidth;height=innerHeight;mainEndDepth=document.getElementById('hero').offsetHeight/Math.max(1,document.documentElement.scrollHeight-innerHeight);if(!ready)return;const pixelRatio=Math.min(devicePixelRatio||1,1.25,2159/width,Math.sqrt(1800000/(width*height)));const cw=Math.max(1,Math.round(width*pixelRatio)),ch=Math.max(1,Math.round(height*pixelRatio));if(canvas.width!==cw)canvas.width=cw;if(canvas.height!==ch)canvas.height=ch;const q=Math.min(quality,Math.sqrt((finished?190000:pixelBudget)/(width*height)));bw=Math.max(1,Math.round(width*q));bh=Math.max(1,Math.round(height*q));for(const t of [backTexture,entryTexture]){gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,t);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,bw,bh,0,gl.RGBA,gl.UNSIGNED_BYTE,null);}const box=trigger.getBoundingClientRect(),ih=box.width*image.naturalHeight/image.naturalWidth;rect=[box.left,box.top+(box.height-ih)/2,box.width,ih];schedule();}
+const waterTextureSizes=new WeakMap();
+function sizeWaterTexture(texture,w,h){
+ const previous=waterTextureSizes.get(texture);
+ if(previous?.width===w&&previous.height===h)return;
+ gl.activeTexture(gl.TEXTURE0);
+ gl.bindTexture(gl.TEXTURE_2D,texture);
+ gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,w,h,0,gl.RGBA,gl.UNSIGNED_BYTE,null);
+ waterTextureSizes.set(texture,{width:w,height:h});
+}
+function resize(){width=innerWidth;height=innerHeight;mainEndDepth=document.getElementById('hero').offsetHeight/Math.max(1,document.documentElement.scrollHeight-innerHeight);if(!ready)return;const pixelRatio=Math.min(devicePixelRatio||1,1.25,2159/width,Math.sqrt(1800000/(width*height)));const cw=Math.max(1,Math.round(width*pixelRatio)),ch=Math.max(1,Math.round(height*pixelRatio));if(canvas.width!==cw)canvas.width=cw;if(canvas.height!==ch)canvas.height=ch;const q=Math.min(quality,Math.sqrt((finished?190000:pixelBudget)/(width*height)));bw=Math.max(1,Math.round(width*q));bh=Math.max(1,Math.round(height*q));sizeWaterTexture(backTexture,bw,bh);if(!finished)sizeWaterTexture(entryTexture,bw,bh);const box=trigger.getBoundingClientRect(),ih=box.width*image.naturalHeight/image.naturalWidth;rect=[box.left,box.top+(box.height-ih)/2,box.width,ih];schedule();}
 function detailOpen(){return finished&&document.getElementById('project-dialog').open;}
 function schedule(){if(!raf&&!document.hidden&&!detailOpen())raf=requestAnimationFrame(render);}
 window.addEventListener('fluid-works-detail-state',()=>{
@@ -3426,7 +3448,7 @@ function render(now,refresh=false){raf=0;if(!ready||document.hidden||detailOpen(
  }
  if(moving||entering||Math.abs(targetDepth-currentDepth)>.001||power>.01)schedule();
 }
-function load(){if(ready||!image.naturalWidth)return;try{gl=canvas.getContext('webgl',{alpha:false,antialias:false,depth:false,stencil:false,preserveDrawingBuffer:false,powerPreference:'high-performance'});if(!gl)throw Error('No WebGL');backdrop=program(ocean);entryBackdrop=program(entryOcean);composite=program(display);buffer=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);backTexture=texture(0);entryTexture=texture(2);wordTexture=texture(1);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,image);fbo=gl.createFramebuffer();gl.bindFramebuffer(gl.FRAMEBUFFER,fbo);gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,backTexture,0);entryFbo=gl.createFramebuffer();gl.bindFramebuffer(gl.FRAMEBUFFER,entryFbo);gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,entryTexture,0);ready=true;resize();if(gl.checkFramebufferStatus(gl.FRAMEBUFFER)!==gl.FRAMEBUFFER_COMPLETE)throw Error('Background buffer incomplete');overlay.classList.add('ready');schedule();}catch(e){console.warn('Shared water renderer:',e);ready=false;overlay.classList.remove('ready');canvas.hidden=true;}}
+function load(){if(ready||!image.naturalWidth)return;try{gl=canvas.getContext('webgl',{alpha:false,antialias:false,depth:false,stencil:false,preserveDrawingBuffer:false,powerPreference:'high-performance'});if(!gl)throw Error('No WebGL');backdrop=program(ocean);entryBackdrop=program(entryOcean);composite=program(display);buffer=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);backTexture=texture(0);entryTexture=texture(2);fbo=gl.createFramebuffer();gl.bindFramebuffer(gl.FRAMEBUFFER,fbo);gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,backTexture,0);entryFbo=gl.createFramebuffer();gl.bindFramebuffer(gl.FRAMEBUFFER,entryFbo);gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,entryTexture,0);ready=true;resize();if(gl.checkFramebufferStatus(gl.FRAMEBUFFER)!==gl.FRAMEBUFFER_COMPLETE)throw Error('Background buffer incomplete');overlay.classList.add('ready');schedule();}catch(e){console.warn('Shared water renderer:',e);ready=false;overlay.classList.remove('ready');canvas.hidden=true;}}
 overlay.addEventListener('pointermove',e=>{tx=e.clientX;ty=e.clientY;targetPower=1;disturbSurface(e);schedule();},{passive:true});overlay.addEventListener('pointerleave',()=>{targetPower=0;cameraTargetX=0;cameraTargetY=0;lastWaterPoint=null;schedule();});
 addEventListener('resize',()=>{resize();if(detailOpen()){drawAt=-100;render(performance.now(),true);}});addEventListener('scroll',()=>{const end=Math.max(1,document.documentElement.scrollHeight-innerHeight);targetDepth=clamp(scrollY/end);schedule();},{passive:true});addEventListener('fluidmotionchange',schedule);document.addEventListener('visibilitychange',()=>{last=0;schedule();});canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();ready=false;cancelAnimationFrame(raf);raf=0;finish();});
 image.addEventListener('load',load,{once:true});image.src=document.querySelector('#portfolio-opening-flow [data-logo]').textContent.trim();if(image.complete&&image.naturalWidth)load();
@@ -3723,7 +3745,10 @@ prepareWorkRaster();
 window.addEventListener('resize',()=>{prepareWorkRaster();update()},{passive:true});
 function paint(){const w=stage.clientWidth,mobile=Math.min(1,w/850),compositionScale=renderBaseWidth/410,sceneScale=workSceneScale();const headingVisibility=clamp(1-(current-60)/260,0,1);heading.style.opacity=headingVisibility;heading.style.pointerEvents=headingVisibility>.1?"auto":"none";hint.style.opacity=clamp(1-(current-2500)/400,0,1);
 pieces.forEach((el,i)=>{const p=project(stations[i],locations[i][1]),delta=stations[i]-current;const approach=clamp((1600-Math.max(0,delta))/800,0,1);const distantAlpha=clamp(1-Math.max(0,delta)/4200,.16,1);const fade=clamp((delta+620)/250,0,1)*(distantAlpha+(1-distantAlpha)*approach);el.style.transform=`translate(-50%,-50%) translate(${locations[i][0]*mobile*compositionScale*p.s*sceneScale}px,${p.y*sceneScale}px) perspective(${900*sceneScale}px) rotateX(${-18-clamp(delta/140,0,12)}deg) rotateY(${locations[i][2]}deg) scale(${p.s*sceneScale/rasterFactor})`;el.style.opacity=p.distance<190?'0':fade;const proximity=clamp(1-Math.abs(delta)/650,0,1);const selection=proximity*proximity*(3-2*proximity);el.style.setProperty('--work-selection',String(selection));el.style.setProperty('--work-projection-scale',String(p.s));el.style.filter='none';el.style.zIndex=String(10-i);el.inert=p.distance<190||fade<.1;el.style.pointerEvents=el.inert?'none':'auto';});
-particles.forEach(p=>{const q=project(p.d,p.z);p.el.style.transform=`translate(${p.x*q.s*sceneScale}px,${q.y*sceneScale}px) scale(${clamp(q.s,.2,4)*sceneScale})`;p.el.style.opacity=q.distance>220?clamp(1-q.distance/4600,.03,.5):0;});drawFish();}
+particles.forEach(p=>{const q=project(p.d,p.z);p.el.style.transform=`translate(${p.x*q.s*sceneScale}px,${q.y*sceneScale}px) scale(${clamp(q.s,.2,4)*sceneScale})`;p.el.style.opacity=q.distance>220?clamp(1-q.distance/4600,.03,.5):0;});
+ // The swim loop paints the fish during normal motion. Reduced motion only redraws when the view moves.
+ if(reduced.matches)drawFish();
+}
 function tick(){frame=0;current=reduced.matches?target:current+(target-current)*.1;if(Math.abs(current-target)<.1)current=target;paint();if(current!==target)frame=requestAnimationFrame(tick);}
 function update(){const travel=clamp(-root.getBoundingClientRect().top/Math.max(1,root.offsetHeight-stage.offsetHeight),0,1)*6;const i=Math.min(5,Math.floor(travel)),f=travel-i,eased=f-Math.sin(2*Math.PI*f)*.72/(2*Math.PI);target=i*800+800*eased;if(!frame)frame=requestAnimationFrame(tick);}
 let fishTime=0,fishLast=0,fishFrame=0,fishVisible=true;
