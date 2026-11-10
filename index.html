@@ -1877,6 +1877,7 @@ main,.topbar,#gauge{transition:opacity .45s ease}
 #gauge.gauge{background:none;text-shadow:-.5px 0 #123f55a0,.5px 0 #123f55a0,0 -.5px #123f55a0,0 1px 1px #123f5566}
 #gauge.gauge:after{display:none;content:none;background:none}
 #gauge .depth-ruler{filter:drop-shadow(0 1px .5px #123f5577)}
+#gauge.gauge{cursor:pointer}
 #gauge .depth-track{background:#e1f4fa80}
 #gauge .depth-minor-ticks{background:repeating-linear-gradient(to bottom,#e7f7ff99 0 1px,transparent 1px 13px)}
 #gauge .depth-scale,#gauge .depth-unit,#gauge #depth-zone{color:#f3fbff}
@@ -2312,6 +2313,65 @@ html body #about #about-title,html body #about #about-title .name-letter{color:#
 html body #about .about-role{color:#174754!important}
 </style>
 
+<style id="skills-percentage-focus-20261110">
+/* Only the six SKILLS captions change; the glass spheres and logo assets are untouched. */
+html body #about #skills-glass .tool-caption {
+  display:flex;justify-content:center;align-items:baseline;gap:0;min-height:39px;
+}
+html body #about #skills-glass .skill-percent {
+  display:inline-flex;align-items:baseline;justify-content:center;gap:2px;
+  font-family:Pretendard,"Malgun Gothic",sans-serif;
+  font-size:inherit;line-height:1.15;font-weight:600;
+  font-variant-numeric:tabular-nums;
+  color:var(--skill-accent,#effaff);
+}
+html body #about #skills-glass .skill-value {
+  font-size:clamp(27px,2.25vw,34px);
+  font-weight:700;letter-spacing:-.035em;
+}
+html body #about #skills-glass .skill-unit {
+  font-size:clamp(12px,1vw,15px);
+  font-weight:600;opacity:.86;margin-left:1px;
+}
+/* Harmonious pastel accents match the existing blue underwater palette. */
+#about #skills-glass .about-skill-list li:nth-child(1){--skill-accent:#baf4df}
+#about #skills-glass .about-skill-list li:nth-child(2){--skill-accent:#91deff}
+#about #skills-glass .about-skill-list li:nth-child(3){--skill-accent:#c7bbff}
+#about #skills-glass .about-skill-list li:nth-child(4){--skill-accent:#ffdaa0}
+#about #skills-glass .about-skill-list li:nth-child(5){--skill-accent:#8be7ef}
+#about #skills-glass .about-skill-list li:nth-child(6){--skill-accent:#d0ccff}
+@media(max-width:700px){
+  html body #about #skills-glass .skill-value{font-size:clamp(24px,5.8vw,30px)}
+  html body #about #skills-glass .skill-unit{font-size:12px}
+  html body #about #skills-glass .tool-caption{min-height:35px}
+}
+</style>
+
+<style id="hero-headcopy-responsive-center-20261110">
+/* HOME headline only: centered against the viewport, not the side indicator. */
+#hero .hero-statement {
+  left: 50%;
+  right: auto;
+  top: 50%;
+  width: 94%;
+  max-width: none;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+/* Increase fluidly at larger window sizes, with a sensible upper limit. */
+#hero #philosophy-flow-copy {
+  font-size: clamp(30px, 4vw, 80px);
+  line-height: 1.28;
+}
+@media (max-width: 700px) {
+  #hero .hero-statement { width: 96%; }
+  #hero #philosophy-flow-copy { font-size: clamp(21px, 4.9vw, 35px); }
+}
+</style>
+<!-- Keep the root scrollbar gutter reserved when a WORKS dialog locks body scrolling. -->
+<style id="fluidity-dialog-scrollbar-stability">
+html { scrollbar-gutter: stable; }
+</style>
 </head>
 
 <body class="opening-active opening-booting">
@@ -2420,7 +2480,7 @@ function advect(input,output,dx,dy){const pr=programs[0];pass(pr,output);bind(pr
 function step(){let dx=moved&&px>=0?mx-px:0,dy=moved&&py>=0?my-py:0;if(!moved){mx=my=px=py=-1;}advect(velocity[0].t,velocity[1],dx,dy);let pr=programs[1];pass(pr,divergence);bind(pr,'uVelocity',velocity[1].t,0);u(pr,'uViscosity',.999);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);pr=programs[2];pass(pr,pressure[1]);bind(pr,'uTexture',pressure[0].t,0);bind(pr,'uDivergence',divergence.t,1);u(pr,'uAlpha',-1);u(pr,'uBeta',.25);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);pressure.reverse();pr=programs[3];pass(pr,projection);bind(pr,'uPressure',pressure[0].t,0);bind(pr,'uVelocity',velocity[1].t,1);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);advect(projection.t,velocity[0],dx,dy);pass(ageProgram,freshness[1]);bind(ageProgram,'uHistory',freshness[0].t,0);bind(ageProgram,'uVelocity',velocity[0].t,1);u(ageProgram,'uPoint',mx,my);u(ageProgram,'uPrevious',px>=0?px:mx,py>=0?py:my);u(ageProgram,'uDt',frameDt);u(ageProgram,'uInject',moved&&Math.hypot(dx,dy)>.00001?1:0);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);freshness.reverse();px=mx;py=my;moved=false;}
 function draw(t){raf=0;if(!loaded)return;if(t-last>15){frameDt=Math.min(.1,Math.max(1/240,(t-(last||t-16.667))/1000));if(!reduced.matches)step();use(final);gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.viewport(0,0,canvas.width,canvas.height);bind(final,'uTexture',art,0);bind(final,'uFluidTexture',velocity[0].t,1);u(final,'uOpacity',1);bind(final,'uFreshness',freshness[0].t,2);u(final,'uProgress',1);for(const [n,c] of [['uTextColor1',16777215],['uTextColor2',15650815],['uTextColor3',11910143],['uTextColor4',16048383]])gl.uniform3f(gl.getUniformLocation(final,n),((c>>16)&255)/255,((c>>8)&255)/255,(c&255)/255);u(final,'resolution',canvas.width,canvas.height);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);window.fluidBoot?.mark('lettering');last=t;}if(t<until)wake();}
 function wake(){if(!raf&&loaded&&visible&&!document.hidden)raf=requestAnimationFrame(draw);}
-function letteringSize(){const r=root.getBoundingClientRect(),w=Math.min(r.width*(r.width/r.height<1.08?.646:.40),720);return {r,w,h:w/2.949};}
+function letteringSize(){const r=root.getBoundingClientRect(),w=innerWidth>=1101?Math.min(innerWidth*(580/1440),r.width*.646):Math.min(580,r.width*.646);return {r,w,h:w/2.949};}
 function resize(){const {r,w,h}=letteringSize(),d=Math.min(devicePixelRatio||1,2);canvas.style.cssText=`position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);width:${w}px;height:${h}px;display:block`;canvas.width=Math.max(1,Math.round(w*d));canvas.height=Math.max(1,Math.round(h*d));wake();}
 root.addEventListener('pointermove',e=>{if(reduced.matches)return;const {r,w,h}=letteringSize(),x=(e.clientX-r.left-r.width/2)/w+.5,y=.5-(e.clientY-r.top-r.height*.48)/h;if(x<0||x>1||y<0||y>1){mx=my=px=py=-1;return;}mx=x;my=y;moved=true;until=performance.now()+18000;wake();},{passive:true});root.addEventListener('pointerleave',()=>{mx=my=px=py=-1;moved=false;});
 const image=new Image();image.onload=()=>{gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,art);gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,image);gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,false);loaded=true;resize();};image.src=root.querySelector('[data-logo]').textContent.trim();root.addEventListener('click',()=>document.getElementById('titleArea').click());new ResizeObserver(resize).observe(root);new IntersectionObserver(es=>{visible=es[0].isIntersecting;wake();}).observe(root);document.addEventListener('visibilitychange',wake);window.addEventListener('fluid-entry-start',()=>{visible=false;cancelAnimationFrame(raf);raf=0;});window.addEventListener('fluid-opening-reset',()=>{visible=true;until=performance.now()+18000;resize();wake();});
@@ -2495,12 +2555,12 @@ const image=new Image();image.onload=()=>{gl.activeTexture(gl.TEXTURE0);gl.bindT
           <span class="glass-sheen" aria-hidden="true"></span>
           <h3 id="skills-title">SKILLS</h3>
           <canvas class="skills-water-renderer" aria-hidden="true"></canvas><ul class="about-skill-list">
-<li data-value="85"><div class="orb" role="meter" aria-label="Figma 숙련도" aria-valuemin="0" aria-valuemax="100" aria-valuenow="85"><img class="tool-logo logo-0" src="assets/image-d37c2bf1a1d4f10a.svg" alt="Figma" width="60" height="60"></div><div class="tool-caption"><span class="tool">Figma</span><span class="skill-percent">85%</span></div></li>
-<li data-value="82"><div class="orb" role="meter" aria-label="Photoshop 숙련도" aria-valuemin="0" aria-valuemax="100" aria-valuenow="82"><img class="tool-logo logo-2" src="assets/image-70e41d7a230a2034.svg" alt="Photoshop" width="60" height="60"></div><div class="tool-caption"><span class="tool">Photoshop</span><span class="skill-percent">82%</span></div></li>
-<li data-value="78"><div class="orb" role="meter" aria-label="Premiere Pro 숙련도" aria-valuemin="0" aria-valuemax="100" aria-valuenow="78"><img class="tool-logo logo-3" src="assets/image-8e41ab592a04be04.svg" alt="Premiere Pro" width="60" height="60"></div><div class="tool-caption"><span class="tool">Premiere Pro</span><span class="skill-percent">78%</span></div></li>
-<li data-value="70"><div class="orb" role="meter" aria-label="Illustrator 숙련도" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70"><img class="tool-logo logo-1" src="assets/image-bf7b5bfe1ba13b02.svg" alt="Illustrator" width="60" height="60"></div><div class="tool-caption"><span class="tool">Illustrator</span><span class="skill-percent">70%</span></div></li>
-<li data-value="70"><div class="orb" role="meter" aria-label="VS Code 숙련도" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70"><img class="tool-logo logo-5" src="assets/image-503d580c442a7071.svg" alt="VS Code" width="60" height="60"></div><div class="tool-caption"><span class="tool">VS Code</span><span class="skill-percent">70%</span></div></li>
-<li data-value="60"><div class="orb" role="meter" aria-label="After Effects 숙련도" aria-valuemin="0" aria-valuemax="100" aria-valuenow="60"><img class="tool-logo logo-4" src="assets/image-1ceb0b9e8b7831d6.svg" alt="After Effects" width="60" height="60"></div><div class="tool-caption"><span class="tool">After Effects</span><span class="skill-percent">60%</span></div></li>
+<li data-value="85"><div class="orb" role="meter" aria-label="Figma 숙련도" title="Figma" aria-valuemin="0" aria-valuemax="100" aria-valuenow="85"><img class="tool-logo logo-0" src="assets/image-d37c2bf1a1d4f10a.svg" alt="Figma" width="60" height="60"></div><div class="tool-caption"><span class="skill-percent"><span class="skill-value">85</span><span class="skill-unit">%</span></span></div></li>
+<li data-value="82"><div class="orb" role="meter" aria-label="Photoshop 숙련도" title="Photoshop" aria-valuemin="0" aria-valuemax="100" aria-valuenow="82"><img class="tool-logo logo-2" src="assets/image-70e41d7a230a2034.svg" alt="Photoshop" width="60" height="60"></div><div class="tool-caption"><span class="skill-percent"><span class="skill-value">82</span><span class="skill-unit">%</span></span></div></li>
+<li data-value="78"><div class="orb" role="meter" aria-label="Premiere Pro 숙련도" title="Premiere Pro" aria-valuemin="0" aria-valuemax="100" aria-valuenow="78"><img class="tool-logo logo-3" src="assets/image-8e41ab592a04be04.svg" alt="Premiere Pro" width="60" height="60"></div><div class="tool-caption"><span class="skill-percent"><span class="skill-value">78</span><span class="skill-unit">%</span></span></div></li>
+<li data-value="70"><div class="orb" role="meter" aria-label="Illustrator 숙련도" title="Illustrator" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70"><img class="tool-logo logo-1" src="assets/image-bf7b5bfe1ba13b02.svg" alt="Illustrator" width="60" height="60"></div><div class="tool-caption"><span class="skill-percent"><span class="skill-value">70</span><span class="skill-unit">%</span></span></div></li>
+<li data-value="70"><div class="orb" role="meter" aria-label="VS Code 숙련도" title="VS Code" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70"><img class="tool-logo logo-5" src="assets/image-503d580c442a7071.svg" alt="VS Code" width="60" height="60"></div><div class="tool-caption"><span class="skill-percent"><span class="skill-value">70</span><span class="skill-unit">%</span></span></div></li>
+<li data-value="60"><div class="orb" role="meter" aria-label="After Effects 숙련도" title="After Effects" aria-valuemin="0" aria-valuemax="100" aria-valuenow="60"><img class="tool-logo logo-4" src="assets/image-1ceb0b9e8b7831d6.svg" alt="After Effects" width="60" height="60"></div><div class="tool-caption"><span class="skill-percent"><span class="skill-value">60</span><span class="skill-unit">%</span></span></div></li>
 </ul><p class="skills-water-error" hidden role="alert"></p>
         </section>
       </div>
@@ -2851,7 +2911,25 @@ const image=new Image();image.onload=()=>{gl.activeTexture(gl.TEXTURE0);gl.bindT
 #fluidity-glass-work .glass-bevel{display:none}
 #fluidity-glass-work .glass-window{box-shadow:none}
 #fluidity-glass-work .glass-window::before{background:#082c416b}
-&lt;/style&gt;&lt;script&gt;document.querySelector(&#x27;.dialog-heading button&#x27;).onclick=function(){parent.postMessage({fluidityPickonClose:true},&#x27;*&#x27;)};document.querySelector(&#x27;.footer a&#x27;).onclick=function(e){e.preventDefault();parent.postMessage({fluidityPickonClose:true},&#x27;*&#x27;)};&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
+&lt;/style&gt;&lt;script&gt;document.querySelector(&#x27;.dialog-heading button&#x27;).onclick=function(){parent.postMessage({fluidityPickonClose:true},&#x27;*&#x27;)};document.querySelector(&#x27;.footer a&#x27;).onclick=function(e){e.preventDefault();parent.postMessage({fluidityPickonClose:true},&#x27;*&#x27;)};&lt;/script&gt;&lt;style id=&quot;pickon-detail-proportional-typography-20261110&quot;&gt;
+/* Widths are relative to the iframe, which fills the responsive works detail window. */
+@media (min-width:701px) {
+  #fluidity-glass-work .dialog-heading {font-size:clamp(19px,1.61vw,26px) !important;padding-block:clamp(15px,1.27vw,20px) !important;}
+  #fluidity-glass-work #pickon-complete .intro h1 {font-size:clamp(35px,2.965vw,47px) !important;}
+  #fluidity-glass-work #pickon-complete .intro &gt; p,
+  #fluidity-glass-work #pickon-complete .copy p {font-size:clamp(13px,1.101vw,18px) !important;}
+  #fluidity-glass-work #pickon-complete .copy h2 {font-size:clamp(28px,2.371vw,38px) !important;}
+  #fluidity-glass-work #pickon-complete .keypoints :is(h2,p) {font-size:clamp(12px,1.016vw,16.5px) !important;}
+  #fluidity-glass-work #pickon-complete .label {font-size:clamp(10px,.847vw,14px) !important;}
+  #fluidity-glass-work #pickon-complete .pair figcaption,
+  #fluidity-glass-work #pickon-complete .footer {font-size:clamp(11px,.931vw,15px) !important;}
+  #fluidity-glass-work #pickon-complete .footer a {font-size:clamp(12px,1.016vw,16.5px) !important;}
+  #fluidity-glass-work #pickon-complete .intro {padding-block:clamp(32px,2.71vw,43px) clamp(30px,2.54vw,40px) !important;}
+  #fluidity-glass-work #pickon-complete .feature {padding-block:clamp(42px,3.56vw,56px) !important;gap:clamp(30px,2.54vw,40px) !important;}
+  #fluidity-glass-work #pickon-complete .keypoints {gap:clamp(20px,1.694vw,27px) !important;}
+  #fluidity-glass-work #pickon-complete .copy h2 {margin-bottom:clamp(23px,1.948vw,31px) !important;}
+}
+&lt;/style&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
 
 </dialog>
 
@@ -3156,6 +3234,8 @@ reduceMotion.addEventListener('change',()=>{
   let navDestination=null,navDestinationTimer=0;
   const clearNavDestination=()=>{navDestination=null;clearTimeout(navDestinationTimer);queue();};
   document.addEventListener('click',event=>{
+    // The gauge has its own continuous depth navigation, not only section links.
+    if(event.target.closest('#gauge'))return;
     const link=event.target.closest('a[href^="#"]');
     if(!link)return;
     const index=sections.findIndex(section=>'#'+section.id===link.hash);
@@ -3168,6 +3248,34 @@ reduceMotion.addEventListener('change',()=>{
   addEventListener('scrollend',clearNavDestination);
   addEventListener('wheel',clearNavDestination,{passive:true});
   addEventListener('touchstart',clearNavDestination,{passive:true});
+
+  // Click at ANY position on the depth gauge to navigate to that exact depth.
+  // The mapping mirrors depth(): 0m/100m/300m/500m and its final scroll stop.
+  const depthRuler=gauge.querySelector('.depth-ruler');
+  gauge.addEventListener('click',event=>{
+    // Keep the existing four section anchors accessible by keyboard.
+    if(event.detail===0&&event.target.closest('a.tick'))return;
+    if(document.body.classList.contains('opening-active'))return;
+    const rect=depthRuler.getBoundingClientRect();
+    if(!rect.height)return;
+    event.preventDefault();
+    const ratio=Math.max(0,Math.min(1,(event.clientY-rect.top)/rect.height));
+    const desiredDepth=ratio*500;
+    const positions=sections.map(section=>section.getBoundingClientRect().top+scrollY);
+    const maxScroll=Math.max(0,document.documentElement.scrollHeight-innerHeight);
+    const finalStop=Math.max(positions[2]+1,Math.min(positions[3],maxScroll));
+    const depthStops=[0,100,300,500];
+    const scrollStops=[positions[0],positions[1],positions[2],finalStop];
+    const segment=desiredDepth<100?0:desiredDepth<300?1:2;
+    const fraction=(desiredDepth-depthStops[segment])/(depthStops[segment+1]-depthStops[segment]);
+    const destination=scrollStops[segment]+(scrollStops[segment+1]-scrollStops[segment])*fraction;
+    navDestination=null;
+    clearTimeout(navDestinationTimer);
+    window.scrollTo({
+      top:Math.max(0,Math.min(maxScroll,destination)),
+      behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'
+    });
+  });
 
   function depth(){
     queued=false;
@@ -58682,7 +58790,7 @@ html body #about .portrait-float{grid-row:2 / span 2;align-self:start}
 html body #about .about-identity{grid-row:2;align-self:start;padding:0}
 html body #about .about-role{margin:12px 0 0;padding-left:var(--role-body-inset,15px);font-size:14px;line-height:1.5;letter-spacing:.10em}
 html body #about .about-description{grid-row:3;align-self:start;width:100%;box-sizing:border-box;margin:0;padding-left:var(--name-optical-inset,3px);font-size:clamp(25px,2.05vw,33px);line-height:1.65;letter-spacing:-.04em}
-html body #about .about-copy-line{display:inline;white-space:normal;word-break:keep-all}
+html body #about .about-copy-line{display:inline;white-space:normal;word-break:keep-all;letter-spacing:.01em}
 html body #about .about-intro-detail{width:max-content!important;max-width:100%;box-sizing:border-box;min-height:0;margin-top:28px;padding:22px 26px;font-size:clamp(16px,1.15vw,19px)!important;line-height:1.75!important;letter-spacing:-.025em}
 html body #about .about-glass-width-reference{display:none}
 html body #about .about-intro-paragraph{max-width:100%;white-space:normal;word-break:keep-all}
@@ -58707,7 +58815,7 @@ html body #about .skills-float{grid-row:4}
   if(ctx&&width){
    ctx.font=cs.fontWeight+' 100px '+cs.fontFamily;
    const text=title.textContent.trim(),tracking=-.035*100*(text.length-1);
-   root.style.setProperty('--about-heading-size',(width/(ctx.measureText(text).width+tracking)*100).toFixed(2)+'px');
+   root.style.setProperty('--about-heading-size',(width/(ctx.measureText(text).width+tracking)*100*0.8).toFixed(2)+'px');
    document.documentElement.style.setProperty('--section-heading-size',root.style.getPropertyValue('--about-heading-size'));
   }
   // Blue guide: ㅊ left stroke at about .08em from the name origin.
@@ -58787,5 +58895,152 @@ html body #about .skills-float{grid-row:4}
 </style>
 
 
+
+<style id="fluidity-opening-proportional-20261110">
+/* Keep approved two-line headline spacing. */
+#hero #philosophy-flow-copy .philosophy-lead {margin-bottom:14px;}
+
+/* Keep the opening FLUIDITY responsive to the desktop viewport. */
+@media (min-width:1101px) {
+  #opening .title-area {
+    left:50%; right:auto;
+    width:40.27777778vw;
+    transform:translateX(-50%);
+  }
+}
+</style>
+
+<style id="works-thumbnail-radius-16px-feedback">
+/* Rounded corners on WORKS thumbnails only; keep existing image, layout and interactions. */
+#works #works-grid .work-item .work-frame {
+  border-radius: 16px !important;
+  overflow: hidden;
+}
+@media (hover: hover) and (pointer: fine) {
+  #works #works-grid .work-link:hover .work-frame {
+    border-radius: 12px 24px 12px 21px !important;
+  }
+}
+#works #works-grid .work-link:focus-visible .work-frame {
+  border-radius: 12px 24px 12px 21px !important;
+}
+</style>
+
+
+<style id="works-detail-viewport-proportions-20261110">
+/* Only WORKS detail modal size changes; preserve original body content/animations.
+   Keep a consistent share of the desktop viewport in windowed and fullscreen modes. */
+@media (min-width:701px) {
+  #project-dialog[data-project="pickon"],
+  #project-dialog:not([data-project="pickon"]) {
+    width: min(72vw, calc(100vw - 32px)) !important;
+    height: min(83dvh, calc(100dvh - 32px)) !important;
+    max-width: none !important;
+    max-height: none !important;
+  }
+}
+</style>
+<style id="works-detail-proportional-typography-20261110">
+/* Windowed baseline: 1440px. Fullscreen: scale to ~133% at 1920px, capped. */
+@media (min-width:701px) {
+  /* Shared detail headers and story intro (applies to all non-PICKON work dialogs) */
+  #project-dialog #works-glass-scroll > .dialog-head {
+    padding:clamp(30px,2.084vw,40px) clamp(52px,3.611vw,70px) !important;
+  }
+  #project-dialog #works-glass-scroll > .dialog-head h2 {
+    font-size:clamp(20px,1.389vw,27px) !important;
+  }
+  #project-dialog #works-glass-scroll > .dialog-head .dialog-close {
+    font-size:clamp(27px,1.875vw,36px) !important;
+  }
+  #project-dialog #works-glass-scroll .project-unified-intro {
+    padding-top:clamp(48px,3.333vw,64px) !important;
+    padding-bottom:clamp(40px,2.778vw,53px) !important;
+  }
+  #project-dialog #works-glass-scroll .project-unified-intro > h2 {
+    font-size:clamp(44px,3.056vw,59px) !important;
+    max-width:clamp(1050px,72.92vw,1400px) !important;
+    margin-bottom:clamp(24px,1.667vw,32px) !important;
+  }
+  #project-dialog #works-glass-scroll .project-unified-intro > .project-intro-description {
+    font-size:clamp(15px,1.042vw,20px) !important;
+    max-width:clamp(900px,62.5vw,1200px) !important;
+  }
+  #project-dialog #works-glass-scroll .project-unified-intro .project-keypoints {
+    gap:clamp(28px,1.945vw,37px) !important;
+    margin-top:clamp(32px,2.223vw,43px) !important;
+  }
+  #project-dialog #works-glass-scroll .project-unified-intro .project-keypoints > div {
+    padding-top:clamp(16px,1.112vw,21px) !important;
+  }
+  #project-dialog #works-glass-scroll .project-unified-intro .project-keypoints h4,
+  #project-dialog #works-glass-scroll .project-unified-intro .project-keypoints p {
+    font-size:clamp(13px,.903vw,17.5px) !important;
+  }
+  #project-dialog #works-glass-scroll footer.project-list-footer {
+    padding-block:clamp(20px,1.39vw,27px) !important;
+    font-size:clamp(10px,.695vw,13.5px) !important;
+  }
+  #project-dialog #works-glass-scroll footer.project-list-footer .project-list-return {
+    font-size:clamp(12px,.834vw,16px) !important;
+  }
+
+  /* Museum: supporting copy below the common introduction */
+  #project-dialog #museum-case-draft .copy h2 {font-size:clamp(32px,2.223vw,43px) !important;}
+  #project-dialog #museum-case-draft .copy p {font-size:clamp(14px,.973vw,19px) !important;max-width:clamp(530px,36.81vw,707px)}
+  #project-dialog #museum-case-draft .label {font-size:clamp(11px,.764vw,15px) !important;}
+
+  /* Baekgeumdang */
+  #project-dialog #baek-case-preview .section h3 {font-size:clamp(24px,1.667vw,32px) !important;}
+  #project-dialog #baek-case-preview .section p {font-size:clamp(13px,.903vw,17.5px) !important;max-width:clamp(660px,45.84vw,880px)}
+  #project-dialog #baek-case-preview .steps strong {font-size:clamp(14px,.973vw,19px) !important;}
+  #project-dialog #baek-case-preview .steps p {font-size:clamp(12px,.834vw,16px) !important;}
+  #project-dialog #baek-case-preview .steps small,
+  #project-dialog #baek-case-preview .case-bar,
+  #project-dialog #baek-case-preview .case-end {font-size:clamp(11px,.764vw,15px) !important;}
+  #project-dialog #baek-case-preview :is(.eyebrow,.tags) {font-size:clamp(10px,.695vw,13.5px) !important;}
+  #project-dialog #baek-case-preview .section {padding-block:clamp(48px,3.334vw,64px) !important;}
+
+  /* Granola */
+  #project-dialog #granola-case-preview .design h3 {font-size:clamp(20px,1.39vw,27px) !important;}
+  #project-dialog #granola-case-preview .design p {font-size:clamp(12px,.834vw,16px) !important;}
+  #project-dialog #granola-case-preview .art-header h3 {font-size:clamp(19px,1.32vw,26px) !important;}
+  #project-dialog #granola-case-preview :is(.eyebrow,.tags,.art-header span,.end) {font-size:clamp(10px,.695vw,13.5px) !important;}
+  #project-dialog #granola-case-preview .lead {font-size:clamp(13px,.903vw,17.5px) !important;}
+  #project-dialog #granola-case-preview .design {gap:clamp(30px,2.084vw,40px) !important;padding-block:clamp(40px,2.778vw,53px) !important;}
+  #project-dialog #granola-case-preview .art-header {padding-block:clamp(32px,2.223vw,43px) !important;}
+
+  /* Mom's Touch */
+  #project-dialog #mom-case .intro h2 {font-size:clamp(34px,2.361vw,46px) !important;}
+  #project-dialog #mom-case .restored-copy h2 {font-size:clamp(38px,2.64vw,51px) !important;}
+  #project-dialog #mom-case .restored-copy .body {font-size:clamp(14px,.973vw,19px) !important;}
+  #project-dialog #mom-case .restored-copy li {font-size:clamp(13px,.903vw,17.5px) !important;}
+  #project-dialog #mom-case .restored-copy .label {font-size:clamp(11px,.764vw,15px) !important;}
+  #project-dialog #mom-case .end h2 {font-size:clamp(28px,1.945vw,38px) !important;}
+  #project-dialog #mom-case .end p {font-size:clamp(12px,.834vw,16px) !important;}
+  #project-dialog #mom-case .restored-row {gap:clamp(40px,2.778vw,53px) !important;padding-block:clamp(55px,3.82vw,73px) !important;}
+
+  /* Kiosk */
+  #project-dialog #kiosk-case-view .kk-intro h2 {font-size:clamp(44px,3.056vw,59px) !important;}
+  #project-dialog #kiosk-case-view :is(.kk-intro p,.kk-copy p,.kk-feature p,.kk-interaction p) {font-size:clamp(15px,1.042vw,20px) !important;}
+  #project-dialog #kiosk-case-view h3 {font-size:clamp(34px,2.361vw,46px) !important;}
+  #project-dialog #kiosk-case-view h4 {font-size:clamp(18px,1.25vw,24px) !important;}
+  #project-dialog #kiosk-case-view .kk-interaction h3 {font-size:clamp(26px,1.806vw,35px) !important;}
+  #project-dialog #kiosk-case-view .kk-point-grid h4,
+  #project-dialog #kiosk-case-view .kk-point-grid p {font-size:clamp(14px,.973vw,19px) !important;}
+  #project-dialog #kiosk-case-view :is(.kk-label,.kk-tastes) {font-size:clamp(11px,.764vw,15px) !important;}
+  #project-dialog #kiosk-case-view figcaption {font-size:clamp(12px,.834vw,16px) !important;}
+  #project-dialog #kiosk-case-view #kk-prototype-open {font-size:clamp(14px,.973vw,19px) !important;}
+  #project-dialog #kiosk-case-view section {padding-block:clamp(54px,3.75vw,72px) !important;}
+  #project-dialog #kiosk-case-view .kk-intro {padding-block:clamp(56px,3.889vw,75px) !important;}
+
+  /* Generic backup case details, if displayed */
+  #project-dialog .dialog-content > p {font-size:clamp(14px,.973vw,19px)}
+  #project-dialog .case-section h3 {font-size:clamp(27px,1.875vw,36px)}
+  #project-dialog .case-section p {font-size:clamp(15px,1.042vw,20px)}
+  #project-dialog .case-row h4 {font-size:clamp(12px,.834vw,16px)}
+  #project-dialog .case-nav {font-size:clamp(12px,.834vw,16px)}
+}
+</style>
 </body>
 </html>
