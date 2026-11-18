@@ -2878,7 +2878,40 @@ const image=new Image();image.onload=()=>{gl.activeTexture(gl.TEXTURE0);gl.bindT
 #pickon-complete .mainvisual figure,#pickon-complete .mainvisual figure:nth-child(2){width:100%;max-width:none;min-width:0;margin:0;border-radius:0}
 #pickon-complete .mainvisual img{width:100%;height:auto;border-radius:0}
 </style>
-<iframe id="pickon-glass-frame" title="PICKON 랜덤 추첨 앱 작품 상세" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;ko&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;&lt;/head&gt;&lt;body&gt;&lt;style&gt;
+<iframe id="pickon-glass-frame" title="PICKON 랜덤 추첨 앱 작품 상세" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;ko&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;&lt;style id=&quot;pickon-balanced-wide-layout&quot;&gt;
+#fluidity-glass-work #pickon-complete{container-type:inline-size;container-name:pickon-reading}
+@container pickon-reading (min-width:1280px){
+ #fluidity-glass-work #pickon-complete .feature{
+  box-sizing:border-box;width:100%;max-width:none;margin-inline:0;
+  padding:3.28125cqw 6%!important;gap:2.34375cqw!important;
+ }
+ #fluidity-glass-work #pickon-complete .feature .copy h2{font-size:2.371cqw!important;margin-bottom:1.948cqw!important}
+ #fluidity-glass-work #pickon-complete .feature .copy p{font-size:1.101cqw!important}
+ #fluidity-glass-work #pickon-complete .feature .label{font-size:.847cqw!important}
+ #fluidity-glass-work #pickon-complete .feature .pair{gap:1.40625cqw}
+ #fluidity-glass-work #pickon-complete .feature .pair figcaption{font-size:.931cqw!important}
+}
+&lt;/style&gt;&lt;style id=&quot;pickon-shared-content-edges&quot;&gt;
+#fluidity-glass-work #pickon-complete .feature{
+ width:78%;max-width:none;box-sizing:border-box;margin-inline:auto;
+ padding-inline:0!important;column-gap:clamp(28px,3vw,48px)!important;
+}
+#fluidity-glass-work #pickon-complete .feature .copy{width:100%;max-width:100%;min-width:0}
+#fluidity-glass-work #pickon-complete .mainvisual{max-width:none}
+@media(min-width:801px){
+ #fluidity-glass-work #pickon-complete .feature{grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr)}
+ #fluidity-glass-work #pickon-complete .feature.reverse{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr)}
+}
+@media(max-width:800px){
+ #fluidity-glass-work #pickon-complete .feature,
+ #fluidity-glass-work #pickon-complete .feature.reverse{grid-template-columns:minmax(0,1fr)}
+ #fluidity-glass-work #pickon-complete .feature.reverse .copy,
+ #fluidity-glass-work #pickon-complete .feature.reverse .visual{order:initial}
+}
+@media(max-width:620px){
+ #fluidity-glass-work #pickon-complete .feature{width:92%}
+}
+&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;style&gt;
 #pickon-complete *{box-sizing:border-box}#pickon-complete{scroll-behavior:smooth}#pickon-complete{margin:0;background:#f5f2ec;color:#352f29;font-family:Pretendard,&quot;Noto Sans KR&quot;,&quot;Malgun Gothic&quot;,sans-serif;-webkit-font-smoothing:antialiased}#pickon-complete button{font:inherit}#pickon-complete a{color:inherit;text-decoration:none}#pickon-complete.detail{max-width:1120px;margin:auto;background:#faf7f1}#pickon-complete .bar{padding:21px 6%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #ded6cb;font-size:15px;font-weight:600}#pickon-complete .bar a{font-size:12px;font-weight:400;color:#85745f}#pickon-complete .intro{padding:48px 7% 40px}#pickon-complete .intro h1{font-size:clamp(28px,3.3vw,44px);font-weight:600;line-height:1.45;letter-spacing:-.045em;margin:0 0 24px;word-break:keep-all}#pickon-complete .intro&gt;p{font-size:15px;line-height:1.9;color:#756b60;margin:0;word-break:keep-all}#pickon-complete .keypoints{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:32px}#pickon-complete .keypoints&gt;div{border-top:1px solid #ded6cb;padding-top:16px}#pickon-complete .keypoints h2{font-size:13px;font-weight:700;line-height:1.8;margin:0 0 8px;letter-spacing:-.025em}#pickon-complete .keypoints p{font-size:13px;line-height:1.8;margin:0;color:#756b60;word-break:keep-all}#pickon-complete .mainvisual{background:#121c2d;overflow:hidden;padding:32px 7% 0;position:relative}#pickon-complete .mainvisual .brand{color:#f4f7fc;font-size:17px;font-weight:800;letter-spacing:-.04em;display:flex;align-items:center;justify-content:space-between}#pickon-complete .brand span{font-size:9px;font-weight:400;letter-spacing:.15em;color:#93a4ba}#pickon-complete .mainvisual .screens{height:350px;max-width:680px;margin:30px auto 0;display:flex;align-items:flex-start;justify-content:center;gap:23px}#pickon-complete .mainvisual figure{width:190px;margin:22px 0 0;box-shadow:0 18px 35px #0004;border-radius:11px;overflow:hidden;flex-shrink:0}#pickon-complete .mainvisual figure:nth-child(2){margin-top:0}#pickon-complete .mainvisual figcaption{display:none}#pickon-complete .feature{padding:54px 7%;display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:42px;align-items:center;background:#fff}#pickon-complete .feature.reverse{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);background:#f1ece3}#pickon-complete .feature.reverse .copy{order:2}#pickon-complete .feature.reverse .visual{order:1}#pickon-complete .label{font-size:10px;letter-spacing:.15em;color:#947c60;display:block;margin-bottom:18px}#pickon-complete .copy h2{font-size:clamp(24px,3.1vw,32px);font-weight:600;line-height:1.45;letter-spacing:-.05em;margin:0 0 23px;word-break:keep-all}#pickon-complete .copy p{font-size:14px;line-height:1.95;color:#7d7060;margin:0;word-break:keep-all}#pickon-complete .visual{min-width:0;background:#eee9e0;padding:22px 18px}#pickon-complete .pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}#pickon-complete .pair figure{margin:0;min-width:0}#pickon-complete .screen-button{display:block;width:100%;border:0;padding:0;background:transparent;cursor:zoom-in;border-radius:8px;overflow:hidden}#pickon-complete .screen-button img{display:block;width:100%;height:auto}#pickon-complete .pair figcaption{font-size:10px;line-height:1.6;color:#8a7a66;text-align:center;margin-top:11px}#pickon-complete .reverse .visual{background:#e5dfd4}#pickon-complete .footer{display:flex;align-items:center;justify-content:space-between;padding:29px 7%;border-top:1px solid #ded6cb;background:#faf7f1;color:#8e7965;font-size:11px}#pickon-complete .footer a{font-size:13px}@media(max-width:650px){.bar{font-size:13px}#pickon-complete .intro{padding:34px 7%}#pickon-complete .intro&gt;p{font-size:14px}#pickon-complete .keypoints{grid-template-columns:1fr;gap:18px;margin-top:26px}#pickon-complete .mainvisual{padding-top:25px}#pickon-complete .mainvisual .screens{height:250px;gap:12px;margin-top:24px}#pickon-complete .mainvisual figure{width:30%;min-width:0;flex-shrink:1}#pickon-complete .mainvisual .brand span{font-size:7px}#pickon-complete .feature,#pickon-complete .feature.reverse{grid-template-columns:1fr;gap:26px;padding:38px 7%}#pickon-complete .feature.reverse .copy,#pickon-complete .feature.reverse .visual{order:initial}#pickon-complete .copy h2{font-size:27px}#pickon-complete .visual{padding:17px 14px}#pickon-complete .pair{gap:14px;max-width:470px;width:100%;margin:auto}#pickon-complete .footer{padding:25px 7%;font-size:9px}#pickon-complete .footer a{font-size:12px}}#pickon-complete .mainvisual{overflow:visible;padding-bottom:32px}#pickon-complete .mainvisual .screens{height:auto;gap:24px;align-items:flex-start}#pickon-complete .mainvisual figure,#pickon-complete .mainvisual figure:nth-child(2){width:29%;max-width:190px;margin:0;box-shadow:none}#pickon-complete .mainvisual img,#pickon-complete .visual img{display:block;width:100%;height:auto;object-fit:contain;border-radius:7px}#pickon-complete .pair figcaption{font-size:11px}#pickon-complete .bar a{display:none}@media(max-width:650px){.mainvisual .screens{height:auto;gap:12px}#pickon-complete .mainvisual figure{width:30%}}
 
 #pickon-complete .mainvisual{padding:12px;overflow:hidden}
@@ -59538,6 +59571,108 @@ html body #about .skills-float{grid-row:4}
 }
 @media(max-width:620px){
  #project-dialog #baek-case-preview .baek-main-preview{width:92%;margin:25px auto 32px}
+}
+</style>
+
+<style id="detail-balanced-wide-layout">
+#project-dialog #works-glass-scroll #kiosk-case-view p.kk-tastes{
+ color:#ffb86b!important;font-weight:600;letter-spacing:.015em;
+}
+/* Scale all parts from the same 1280px reading canvas; keep narrow layouts. */
+#project-dialog #baek-case-preview>.case,
+#project-dialog #mom-case,
+#project-dialog #museum-case-draft,
+#project-dialog #kiosk-case-view>.kk-case{
+ container-type:inline-size;container-name:detail-reading;
+}
+@container detail-reading (min-width:1280px){
+ #project-dialog #baek-case-preview .baek-detail-row,
+ #project-dialog #mom-case .restored-row,
+ #project-dialog #museum-case-draft .feature,
+ #project-dialog #kiosk-case-view .kk-feature{
+  width:100%;max-width:none;box-sizing:border-box;margin-inline:0;
+  padding-inline:7%!important;column-gap:3.125cqw!important;
+ }
+ #project-dialog #baek-case-preview .baek-detail-row{padding-block:3.75cqw!important;row-gap:2.1875cqw}
+ #project-dialog #baek-case-preview .baek-detail-copy h3{font-size:1.875cqw!important;margin-bottom:1.25cqw}
+ #project-dialog #baek-case-preview .baek-detail-copy p{font-size:1.015625cqw!important}
+ #project-dialog #baek-case-preview .baek-detail-copy .eyebrow{font-size:.78125cqw!important;margin-bottom:.9375cqw}
+ #project-dialog #baek-case-preview .baek-detail-screen img{max-height:37.5cqw;object-position:center}
+ #project-dialog #baek-case-preview .steps{gap:1.875cqw}
+ #project-dialog #baek-case-preview .steps strong{font-size:1.09375cqw!important}
+ #project-dialog #baek-case-preview .steps p{font-size:.9375cqw!important}
+ #project-dialog #baek-case-preview .steps small{font-size:.859375cqw!important}
+ #project-dialog #mom-case .restored-row{padding-block:4.296875cqw!important}
+ #project-dialog #mom-case .restored-copy h2{font-size:2.96875cqw!important;margin-bottom:1.953125cqw}
+ #project-dialog #mom-case .restored-copy .body{font-size:1.09375cqw!important}
+ #project-dialog #mom-case .restored-copy li{font-size:.9375cqw!important}
+ #project-dialog #mom-case .restored-copy .label{font-size:.859375cqw!important}
+ #project-dialog #museum-case-draft .feature,
+ #project-dialog #kiosk-case-view .kk-feature{padding-block:4.21875cqw!important}
+ #project-dialog #museum-case-draft .feature .copy h2{font-size:2.5cqw!important;margin-bottom:1.796875cqw}
+ #project-dialog #museum-case-draft .feature .copy p{font-size:1.09375cqw!important}
+ #project-dialog #kiosk-case-view .kk-feature h3{font-size:2.65625cqw!important}
+ #project-dialog #kiosk-case-view .kk-feature p{font-size:1.171875cqw!important}
+ #project-dialog #kiosk-case-view .kk-feature .kk-label{font-size:.859375cqw!important}
+ #project-dialog #kiosk-case-view .kk-feature p.kk-tastes{font-size:1.015625cqw!important}
+ #project-dialog #kiosk-case-view .kk-compare{gap:1.5625cqw;padding:1.875cqw}
+}
+</style>
+
+<style id="baek-actual-copy-image-gap">
+/* Align every Baek content row to the same outer edges as the main preview. */
+#project-dialog #baek-case-preview .baek-detail-row{
+ width:78%;max-width:none;margin-inline:auto;padding-inline:0!important;
+ column-gap:clamp(28px,3vw,48px)!important;
+}
+#project-dialog #baek-case-preview .baek-detail-copy{
+ width:100%;max-width:100%;justify-self:start;
+}
+#project-dialog #baek-case-preview .baek-detail-screen{
+ display:block;width:100%;max-width:none;margin:0;
+}
+#project-dialog #baek-case-preview .baek-detail-screen img{
+ display:block;width:100%;height:auto;max-width:100%;max-height:none;object-fit:contain;margin:0;
+}
+@media(min-width:801px){
+ #project-dialog #baek-case-preview .baek-detail-row{grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr)}
+ #project-dialog #baek-case-preview .baek-row-reverse{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr)}
+}
+@media(max-width:620px){
+ #project-dialog #baek-case-preview .baek-detail-row{width:92%}
+}
+</style>
+
+<style id="all-projects-shared-content-edges">
+/* Match the approved Baek row: 78% outer width, 40:60 copy/visual, no extra side inset. */
+#project-dialog #mom-case .restored-row,
+#project-dialog #museum-case-draft .feature,
+#project-dialog #kiosk-case-view .kk-feature{
+ width:78%;max-width:none;box-sizing:border-box;margin-inline:auto;
+ padding-inline:0!important;column-gap:clamp(28px,3vw,48px)!important;
+}
+#project-dialog #mom-case .restored-copy,
+#project-dialog #museum-case-draft .feature .copy,
+#project-dialog #kiosk-case-view .kk-feature .kk-copy{
+ width:100%;max-width:100%;min-width:0;justify-self:start;
+}
+#project-dialog #kiosk-case-view .kk-compare{padding-inline:0}
+@media(min-width:801px){
+ #project-dialog #mom-case .restored-row,
+ #project-dialog #museum-case-draft .feature,
+ #project-dialog #kiosk-case-view .kk-feature{
+  grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);
+ }
+}
+@media(max-width:800px){
+ #project-dialog #mom-case .restored-row,
+ #project-dialog #museum-case-draft .feature,
+ #project-dialog #kiosk-case-view .kk-feature{grid-template-columns:minmax(0,1fr)}
+}
+@media(max-width:620px){
+ #project-dialog #mom-case .restored-row,
+ #project-dialog #museum-case-draft .feature,
+ #project-dialog #kiosk-case-view .kk-feature{width:92%}
 }
 </style>
 </body>
